@@ -50,8 +50,8 @@ function assetAndStuff
 function fixPermissions
 {
     cd $TARGETDIR
-    sudo setfacl -R -m u:apache:rwx -m u:apache:rwx ezpublish/{cache,logs,config} ezpublish_legacy/{design,extension,settings,var} web
-    sudo setfacl -dR -m u:apache:rwx -m u:`whoami`:rwx ezpublish/{cache,logs,config} ezpublish_legacy/{design,extension,settings,var} web
+    sudo setfacl -R -m u:apache:rwx -m u:apache:rwx ezpublish/{cache,logs,config,sessions} ezpublish_legacy/{design,extension,settings,var,sessions} web
+    sudo setfacl -dR -m u:apache:rwx -m u:`whoami`:rwx ezpublish/{cache,logs,config,sessions} ezpublish_legacy/{design,extension,settings,var,sessions} web
     cd $BASEDIR
 }
 
