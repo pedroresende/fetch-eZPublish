@@ -9,6 +9,9 @@ fi
 
 TARGETDIR=$1
 BASEDIR=$(pwd)
+WEBSERVER_USER_APACHE="apache"
+WEBSERVER_USER_WWW="www-data"
+
 
 function getPlatform
 {
@@ -50,8 +53,13 @@ function assetAndStuff
 function fixPermissions
 {
     cd $TARGETDIR
-    sudo setfacl -R -m u:apache:rwx -m u:apache:rwx ezpublish/{cache,logs,config,sessions} ezpublish_legacy/{design,extension,settings,var,sessions} web
-    sudo setfacl -dR -m u:apache:rwx -m u:`whoami`:rwx ezpublish/{cache,logs,config,sessions} ezpublish_legacy/{design,extension,settings,var,sessions} web
+    if id -u $WEBSERVER_USER_APACHE  >/dev/null 2>&1; then
+        sudo setfacl -R -m u:$WEBSERVER_USER_APACHE:rwx -m u:$WEBSERVER_USER_APACHE:rwx ezpublish/{cache,logs,config,sessions} ezpublish_legacy/{design,extension,settings,var,sessions} web
+        sudo setfacl -dR -m u:$WEBSERVER_USER_APACHE:rwx -m u:`whoami`:rwx ezpublish/{cache,logs,config,sessions} ezpublish_legacy/{design,extension,settings,var,sessions} web
+    else
+        sudo setfacl -R -m u:$WEBSERVER_USER_WWW:rwx -m u:$WEBSERVER_USER_WWW:rwx ezpublish/{cache,logs,config,sessions} ezpublish_legacy/{design,extension,settings,var,sessions} web
+        sudo setfacl -dR -m u:$WEBSERVER_USER_WWW:rwx -m u:`whoami`:rwx ezpublish/{cache,logs,config,sessions} ezpublish_legacy/{design,extension,settings,var,sessions} web
+    fi
     cd $BASEDIR
 }
 
